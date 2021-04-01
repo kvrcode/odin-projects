@@ -2,6 +2,7 @@
 // need to convert large numbers exceeding length 15 to 10e15 format
 //above already happens but theres a grey area that would ideally be taken care of i think 10e15 to 10e20
 //need to add commas to numbers > 999
+//need to add support for negative numbers
 
 //calculator "state" object
 let calculator = {
@@ -66,6 +67,7 @@ const handle_number_event = () => {
             calculator.current_int += number.textContent;
             if(calculator.current_int.length > 15) { return }
 
+            console.log(calculator);
             update_screen(calculator.current_int);
         })
     })
@@ -78,17 +80,32 @@ const handle_operator_event = () => {
 
     operators.forEach(operator => {
         operator.addEventListener('click', () => {
-            if(operator.value === 'subtract' && calculator.current_int === '') { //allows for negative numbers
-                return update_screen(calculator.current_int += '-')
-            }
+            // calculator.operation = '';
+            // if(operator.value === 'subtract' && calculator.current_int === '') { //allows for negative numbers
+            //     return update_screen(calculator.current_int += '-')
+            // }
 
-            if(calculator.current_int !== '' && calculator.running_total !== '') {
+            if(calculator.current_int !== '' && calculator.running_total !== '') { //allows chaining
                 operate(calculator.operation, parseFloat(calculator.running_total), parseFloat(calculator.current_int))
             }
 
             calculator.operation = operator.value;
+            // if(calculator.operation === 'subtract' && calculator.running_total === '') {  }
             if(calculator.running_total === '') {calculator.running_total = calculator.current_int;}
             calculator.current_int = '';
+
+
+            if(calculator.current_int === '' && operator.value === 'subtract' && calculator.running_total === '') {
+                console.log('neg');
+                calculator.current_int += '-';
+                // update_screen('-');
+                update_screen(calculator.current_int);
+                console.log(calculator);
+            } else if (calculator.current_int.includes('-') && operator.value === 'subtract'){
+                calculator.operation = 'subtract';
+            }
+
+
             update_screen('');
         })
     })
@@ -120,7 +137,9 @@ const handle_enter = () => {
         const previous = calculator.running_total;
         const current = calculator.current_int;
         const operation = calculator.operation;
+
         operate(operation, parseFloat(previous), parseFloat(current));
+
         calculator.current_int = '';
         calculator.operation = '';
     })
