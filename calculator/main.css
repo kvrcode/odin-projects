@@ -31,11 +31,16 @@ body{
 }
 
 .buttons{
+    margin-top: 5rem;
     display: grid;
+    grid-gap: 0.5rem;
     grid-template-columns: repeat(4, 1fr);
 }
 
 .buttons > button{
+    cursor: pointer;
     padding: 0.5rem;
     font-size: 1.5rem;
+    border: none;
+    outline: none;
 }

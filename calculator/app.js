@@ -23,8 +23,10 @@ function divide(x, y) {
 //just saving the world...
 const divide_by_zero = () => {
     if(calculator.operation === 'divide' && calculator.current_int === '0') {
+        console.log('true')
         return true
     }else {
+        console.log('false')
         return false
     }
 }
@@ -40,9 +42,11 @@ const handle_clear = () => {
 
 //handles evaluation
 const operate = (callback, x, y) => {
+    // console.log(callback);
     let result = window[callback](x, y); //easier callback method mentioned above...at least i believe this is easier way
-    if(divide_by_zero()) { result = 'ask siri...'};
+    // if(divide_by_zero()) { calculator.running_total = 'ask siri...'};
     calculator.running_total = result.toFixed(4).toString();
+    if(divide_by_zero()) { calculator.running_total = 'ask siri...'};
     update_screen(calculator.running_total);
     // return result;
 }
@@ -69,12 +73,12 @@ const handle_operator_event = () => {
 
     operators.forEach(operator => {
         operator.addEventListener('click', () => {
-            calculator.operation = operator.value;
-            if(calculator.current_int === '') return //cant operate on no number
-
+            // if(calculator.current_int === '') return //cant operate on no number
             if(calculator.current_int !== '' && calculator.running_total !== '') {
                 operate(calculator.operation, parseFloat(calculator.running_total), parseFloat(calculator.current_int))
+                calculator.operate = '';
             }
+            calculator.operation = operator.value;
             if(calculator.running_total === '') {calculator.running_total = calculator.current_int;}
             calculator.current_int = '';
             console.log(calculator);
