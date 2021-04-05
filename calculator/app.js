@@ -42,6 +42,7 @@ const handle_clear = () => {
     calculator.current_int = '';
     calculator.operation = '';
     update_screen('');
+    console.log(calculator);
 }
 
 //handles evaluation via callback
@@ -56,20 +57,23 @@ const operate = (callback, x, y) => {
     return update_screen(calculator.running_total);
 }
 
+const number_callback = (number) => {
+    if(number.textContent === '.' && calculator.current_int.includes('.')) return //82.201.3.4 eh
+    // if(number.textContent === '-' && calculator.current_int.includes('-')) return
+
+    calculator.current_int += number.textContent;
+    if(calculator.current_int.length > 15) { return }
+
+    console.log(calculator);
+    update_screen(calculator.current_int);
+}
+
 //handles number keypresses and displaying to user
 const handle_number_event = () => {
     const numbers = document.querySelectorAll('.number');
 
     numbers.forEach(number => {
-        number.addEventListener('click', () => {
-            if(number.textContent === '.' && calculator.current_int.includes('.')) return //82.201.3.4 eh
-
-            calculator.current_int += number.textContent;
-            if(calculator.current_int.length > 15) { return }
-
-            console.log(calculator);
-            update_screen(calculator.current_int);
-        })
+        number.addEventListener('click', () => number_callback(number));
     })
 }
 handle_number_event();
@@ -83,35 +87,33 @@ const handle_operator_event = () => {
     operators.forEach(operator => {
         operator.addEventListener('click', () => {
 
-            if(old_operator === '') { old_operator = operator.value; }
-            console.log(old_operator)
-
             if(calculator.current_int !== '' && calculator.running_total !== '') { //allows chaining
                 operate(calculator.operation, parseFloat(calculator.running_total), parseFloat(calculator.current_int))
             }
 
+            if(calculator.running_total !== '' ) { old_operator = operator.value; }
+            // console.log(old_operator)
+
             calculator.operation = operator.value;
-            // calculator.operation = operator.value;
-            // if(calculator.operation === 'subtract' && calculator.running_total === '') {  }
+
             if(calculator.running_total === '') {calculator.running_total = calculator.current_int;}
             calculator.current_int = '';
 
-
             if(calculator.current_int === '' && operator.value === 'subtract' && calculator.running_total === '') { //lets you place a negative before first operand
-                console.log('neg');
+                // console.log('neg');
                 calculator.current_int += '-';
                 // update_screen('-');
                 update_screen(calculator.current_int);
                 console.log(calculator);
             } else if (calculator.current_int.includes('-') && operator.value === 'subtract'){ //if already a negative number, just allows you to subtract
                 calculator.operation = 'subtract';
-            } else if (calculator.running_total !== '' && operator.value === 'subtract'){ //makes 2nd operand a negative number without messing up previously selected operator
+                console.log('neg #');
+            } else if (calculator.running_total !== '' && operator.value === 'subtract' && old_operator !== 'subtract'){ //makes 2nd operand a negative number without messing up previously selected operator
                 calculator.current_int += '-';
-                calculator.operation = old_operator;
+                // calculator.operation = old_operator;
                 old_operator = '';
                 // calculator.value = operation;
             }
-
 
             update_screen('');
         })
@@ -164,7 +166,31 @@ const undo = () => {
 }
 undo();
 
+const toggle_negative_number = () => {
+    const negative = document.querySelector('.negative');
+    // const subtract = document.querySelector('.subtract');
+
+    negative.addEventListener('click', () => {
+
+        // if (!calculator.current_int.includes('-')) return
+        if (!calculator.current_int.includes('-')) {
+            // calculator.current_int.unshift('-');
+            calculator.current_int = '-' + calculator.current_int;
+            update_screen(calculator.current_int);
+            console.log(calculator);
+            // calculator.current_int.unshift('-'); //just to explicitly place at beginning
+        } else if (calculator.current_int.split('')[0] === '-') {
+            // calculator.current_int.shift();
+            calculator.current_int = calculator.current_int.substring(1);
+            console.log(calculator);
+            update_screen(calculator.current_int);
+        }
+
+    })
+}
+toggle_negative_number();
+
 //absolutely nothing right now
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('start');
-})
+// document.addEventListener('DOMContentLoaded', () => {
+//     console.log('start');
+// })

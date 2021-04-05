@@ -71,4 +71,6 @@ body{
     outline: none;
 }
 
-/* s */
+.is-not-operator{
+    background-color: #35769c !important;
+}
