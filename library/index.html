@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Library</title>
+
+    <!-- google fonts - raleway -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+
+    <h1>Library</h1>
+    <button class="new">Add new book</button>
+
+    <form action="submit" class="form">
+        <div class="form-left">
+            <label for="title">Title:</label>
+            <label for="author">Author:</label>
+            <label for="pages">Pages:</label>
+            <label for="read">Read:</label>
+        </div>
+        <div class="form-right">
+            <input class="form-input" type="text" name="title" placeholder="Harry Potter">
+            <input class="form-input" type="text" name="author" placeholder="J.K. Rowling">
+            <input class="form-input" type="number" name="pages" placeholder="400">
+            <input class="form-input" type="checkbox" name="read">
+        </div>
+        <input class="form-submit" type="submit" value="ADD">
+    </form>
+
+    <div class="library">
+        <!-- <div class="card">
+            <p class="title">Title</p>
+            <p class="author">author</p>
+            <p class="pages">23</p>
+            <p class="read">Not read</p>
+            <input class="status-toggle" type="checkbox">
+        </div> -->
+
+    </div>
+
+    <script src="./app.js"></script>
+</body>
+</html>

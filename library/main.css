@@ -1,0 +1,88 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Raleway, sans-serif;
+}
+
+html{
+    font-size: 62.5%;
+}
+
+body{
+    background-color: #394A59;
+    text-align: center;
+}
+
+h1{
+    font-weight: 700;
+    color: #f4f4f4;
+    margin-top: 3rem;
+}
+
+.new{
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    padding: 0.5rem 1rem;
+    text-transform: uppercase;
+    background-color: #D96666;
+    margin-top: 1rem;
+}
+
+.library{
+    padding: 0rem 3rem;
+    margin-top: 6rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card{
+    flex: 1 0 25%;
+    color: #D9BC9A;
+    border-radius: 5px;
+    padding: 1rem;
+    margin: 1rem;
+    box-shadow: 2px 2px 6px #243646;
+}
+
+.form{
+    font-size: 1.5rem;
+    color: #f4f4f4;
+    background-color: #394A59;
+    padding: 3rem;
+    /* border: 1px solid black; */
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 50%;
+    display: none;
+    justify-content: center;
+    /* position: relative; */
+}
+.form-active{
+    display: flex;
+}
+
+.form-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.form-right{
+    display: flex;
+    flex-direction: column;
+}
+
+.form-left > label,
+.form-right > input{
+    margin: 1rem;
+}
+.form-submit{
+    position: absolute;
+    bottom: 0;
+}
+
+.form-field > label {
+    width: 200px;
+}
