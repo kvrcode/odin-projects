@@ -24,15 +24,13 @@
 //once everything finished - try applying minimax algorithm
 
 
-
-
 const Player = (mark) => {
 
     let _mark = mark;
 
     const getMark = () => _mark;
 
-    const setMark = (mark, active) => {
+    const setMark = (mark) => {
         _mark = mark;
     }
 
@@ -47,18 +45,21 @@ const Gameboard = (() => {
                    '','','',
                    '','',''
                   ];
-    //let board = document.querySelectorAll('.square'); //   Nodelist[9 squares]
 
-    const isBoardFull = () => {
-        displayController.buttons.forEach(button => {
-            if(button.textContent === '') {
-                console.log(full);
-            }
-        })
+    const squareIsOccupied = () => {
+
+        console.log('i am here');
+    }
+
+    const boardIsFull = () => {
+
+        return !results.includes('') ? true : false;
+
     }
 
     return {
-        results
+        results,
+        boardIsFull
     }
 
 })()
@@ -66,21 +67,40 @@ const Gameboard = (() => {
 const AI = (() => {
     const buttons = document.querySelectorAll('.square');
 
-    const chooseSquare = () => {
-        let rand = Math.floor(Math.random() * 8);
+    const randomNumber = () => {
+        return Math.floor(Math.random() * 8); //random number 0 - 8
+    }
 
-        const square = buttons[rand];
+    const chooseSquare = (num) => {
 
-        return square
+        return buttons[num];
+
     }
 
     const aiPlay = () => {
-        let rand = Math.floor(Math.random() * 8); //random number 0 - 8
-        if(buttons[rand].textContent !== '') { rand = Math.floor(Math.random() * 8) };
+        if(Gameboard.boardIsFull()) return //dont make a move on a full board
+
         const aiMark = Game.getAIPlayer().getMark();
-        buttons[rand].textContent = aiMark;
-        console.log(buttons[rand]);
+        let rand = randomNumber();
+        let square = chooseSquare(rand);
+
+        if(square.textContent !== '') { //pick another square if current choice is taken -- currently failing
+            rand = randomNumber();
+            square = chooseSquare(rand);
+        }
+
+        //instead of random ^^^
+        //from Gameboard.results array...
+        //choose from element indexes that === ''
+        //then get that index to apply AIMark to the corresponding button
+
+        square.textContent = aiMark;
         Gameboard.results[rand] = aiMark;
+
+        // if(buttons[rand].textContent !== '') { rand = Math.floor(Math.random() * 8) };
+        // console.log(square);
+
+        displayController.enableButtons(buttons);
     }
 
     return {
@@ -89,10 +109,8 @@ const AI = (() => {
 })()
 
 const Game = (() => {
-    const human = Player('X');
-    const ai = Player('O');
-
-    //if human chooses O, AI has to go first, not possible with my code rn
+    const human = Player('');
+    const ai = Player('');
 
     let played = false;
 
@@ -100,21 +118,22 @@ const Game = (() => {
 
     const getAIPlayer = () => ai;
 
-    // const checkBoard = () => {
-
-    // }
-
     const humanTurn = (button, key, callback)  => {
-        if(button.textContent !== '') return // cant play on an already played square
+        if(getHumanPlayer().getMark() === '') return
+        if(button.textContent !== '') return
+
+        displayController.disableButtons(displayController.buttons);
+
         const playerMark = getHumanPlayer().getMark();
+
         button.textContent = playerMark;
         Gameboard.results[key] = playerMark;
+
         played = true;
         console.log(Gameboard.results, played);
+
         setTimeout(callback, 1000);
-        // callback();
     }
-    // humanTurn()
 
     const aiTurn = () => {
         if(played) {
@@ -132,7 +151,7 @@ const Game = (() => {
             o.classList.remove('active-selector');
         }
 
-        displayController.enable(displayController.x, displayController.o);
+        displayController.enableSelectors(displayController.x, displayController.o);
     }
 
     return {
@@ -149,15 +168,22 @@ const displayController = (() => {
     const buttons = document.querySelectorAll('.square');
     const restart = document.querySelector('.restart > button');
 
-    const disable = (x, o) => {
-        console.log('disabled');
+    const disableSelectors = (x, o) => {
         x.disabled = true;
         o.disabled = true;
     }
 
-    const enable = (x, o) => {
+    const enableSelectors = (x, o) => {
         x.disabled = false;
         o.disabled = false;
+    }
+
+    const disableButtons = () => {
+        buttons.forEach(button => button.disabled = true);
+    }
+
+    const enableButtons = () => {
+        buttons.forEach(button => button.disabled = false);
     }
 
     const changePlayerMark = (mark) => {
@@ -166,21 +192,21 @@ const displayController = (() => {
             o.classList.remove('active-selector');
             Game.getHumanPlayer().setMark(mark);
             Game.getAIPlayer().setMark('O');
-            disable(x, o);
         }else {
             x.classList.remove('active-selector');
             o.classList.add('active-selector');
             Game.getHumanPlayer().setMark(mark);
             Game.getAIPlayer().setMark('X');
-            disable(x, o);
+            AI.aiPlay(); //AI goes first if player chooses 'O'
         }
+        disableSelectors(x, o);
     }
 
     x.addEventListener('click', () => changePlayerMark('X'));
     o.addEventListener('click', () => changePlayerMark('O'));
 
     buttons.forEach((button, key) => {
-        button.addEventListener('click', () => Game.humanTurn(button, key, AI.aiPlay))
+        button.addEventListener('click', () => Game.humanTurn(button, key, AI.aiPlay)) //Game.aiTurn ???
     })
 
     restart.addEventListener('click', () => Game.restart(buttons, x, o));
@@ -189,7 +215,9 @@ const displayController = (() => {
         x,
         o,
         buttons,
-        enable
+        enableSelectors,
+        disableButtons,
+        enableButtons
     }
 })()
 
