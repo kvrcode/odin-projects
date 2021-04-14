@@ -1,26 +1,5 @@
-// "use strict";
-
-//player needs to select their 'mark'
-//AI is assigned to whatever 'mark' player did not select
-
-// X always make first move
-//O always makes second move
-//makes a difference based on what 'mark' player chooses
-
-//on pressing button -- player's mark updates text content of selected button
-
-//recruit difficulty AI, generate random number 0-8 and update that button-Nodelist[num 0-8] with AI's mark
-
-
-//if button-Nodelist[index].textContent !== '' return cant play in a square thats already taken
-
 //have arrays of possible wins to check against current gameboard array for win, loss, tie
-
-//restart button - function
-
 //display winner and etc
-
-//just use 'recruit level AI' for now
 //once everything finished - try applying minimax algorithm
 
 
@@ -37,8 +16,6 @@ const Player = (mark) => {
     return { getMark, setMark }
 }
 
-// console.log(Player('X').setMark())
-
 const Gameboard = (() => {
     const buttons = document.querySelectorAll('.square');
     let results = [
@@ -47,12 +24,6 @@ const Gameboard = (() => {
                    '','',''
                   ];
 
-    const squareIsOccupied = (index) => {
-
-        return results[index] !== '' ? true : false;
-
-    }
-
     const boardIsFull = () => {
 
         return Gameboard.results.includes('') ? false : true;
@@ -60,25 +31,39 @@ const Gameboard = (() => {
     };
 
     const checkHorizontal = () => {
+        //[0 1 2]
+        //[3 4 5]
+        //[6 7 8]
+
+        //arr.every(val === val) ? true : false
 
     }
 
     const checkVertical = () => {
+        //[0 3 6]
+        //[1 4 7]
+        //[2 5 8]
+
+        //arr.every(val === val) ? true : false
 
     }
 
     const checkDiagonal = () => {
+        //0 4 8
+        //2 4 6
+
+        //arr.every(val === val) ? true : false
 
     }
 
     const checkWin = () => {
-
+        //if 'checkDirectional' returns true
+        //displayWin(playerMark)
     }
 
     return {
         results,
         boardIsFull,
-        squareIsOccupied,
         checkWin
     }
 
@@ -86,22 +71,23 @@ const Gameboard = (() => {
 
 const AI = (() => {
 
-    const buttons = document.querySelectorAll('.square');
-
     const randomNumber = (length) => {
+
         const range = length - 1;
         return Math.floor(Math.random() * range); // 0 - last index in Gameboard.choices array
+
     }
 
     const findEmptySquares = (arr) => {
+
         let choices = [];
         for(let i = 0; i <= arr.length - 1; i++) {
             if(arr[i] === ''){
                 choices.push(i);
             }
         }
-        // console.log(choices, 'CHOICES');
         return choices;
+
     }
 
     const chooseSquare = (num) => {
@@ -144,6 +130,7 @@ const Game = (() => {
     const getAIPlayer = () => ai;
 
     const humanTurn = (button, key, callback)  => {
+
         if(getHumanPlayer().getMark() === '') return
         if(button.textContent !== '') return
 
@@ -155,7 +142,6 @@ const Game = (() => {
         Gameboard.results[key] = playerMark;
 
         played = true;
-        console.log('after human turn', Gameboard.results);
 
         setTimeout(() => {
             if(Gameboard.boardIsFull()) {
@@ -164,6 +150,7 @@ const Game = (() => {
                 callback();
             }
         }, 1000);
+
     }
 
     const aiTurn = () => {
@@ -179,7 +166,6 @@ const Game = (() => {
                              '','','',
                              '','',''
                             ];
-        //Gameboard.choices = [];
 
         Game.getAIPlayer().setMark('');
         Game.getHumanPlayer().setMark('');
@@ -238,6 +224,7 @@ const displayController = (() => {
 
             Game.getHumanPlayer().setMark(mark);
             Game.getAIPlayer().setMark('X');
+
             AI.aiPlay(); //AI goes first if player chooses 'O'
         }
         disableSelectors(x, o);
