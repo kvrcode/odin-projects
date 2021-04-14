@@ -40,24 +40,24 @@ const Player = (mark) => {
 // console.log(Player('X').setMark())
 
 const Gameboard = (() => {
+    const buttons = document.querySelectorAll('.square');
     let results = [
                    '','','',
                    '','','',
                    '','',''
                   ];
-    let choices = [];
 
     const squareIsOccupied = (index) => {
-        
-        if(Gameboard.results[index] !== '') return
+
+        return results[index] !== '' ? true : false;
 
     }
 
     const boardIsFull = () => {
 
-        return !results.includes('') ? true : false;
+        return Gameboard.results.includes('') ? false : true;
 
-    }
+    };
 
     const checkHorizontal = () => {
 
@@ -77,7 +77,6 @@ const Gameboard = (() => {
 
     return {
         results,
-        choices,
         boardIsFull,
         squareIsOccupied,
         checkWin
@@ -99,42 +98,32 @@ const AI = (() => {
         for(let i = 0; i <= arr.length - 1; i++) {
             if(arr[i] === ''){
                 choices.push(i);
-                // Gameboard.choices.push(i);
             }
         }
         // console.log(choices, 'CHOICES');
         return choices;
-        console.log('indexes', Gameboard.choices);
-        // choices; //[] of indexes in Gameboard.results[] that equals ''
     }
 
     const chooseSquare = (num) => {
 
-        // console.log(Gameboard.results);
-        // const emptySpaces = findEmptySquares(Gameboard.results);
-        // const index = emptySpaces[num];
-
-        // console.log('empty spaces arr', emptySpaces)
-        // console.log('index', num);
-        return buttons[num];
+        return buttons[num]; //buttons nodelist corresponds to Gameboard.results[]
 
     }
 
     const aiPlay = () => {
-        if(Gameboard.boardIsFull()) return //dont make a move on a full board
+        //if(Gameboard.boardIsFull()) return //dont make a move on a full board
 
         const aiMark = Game.getAIPlayer().getMark();
 
-        let choices = findEmptySquares(Gameboard.results);
-        console.log(choices, 'CHOICES');
-        let rand = randomNumber(choices.length);
-        let index = choices[rand];
-        let square = chooseSquare(index);
-        console.log(square);
+        let choices = findEmptySquares(Gameboard.results); //[] that contains indexes equal to '' in Gameboard.results[]
+
+        let rand = randomNumber(choices.length); //random number in range of choices[]
+        let index = choices[rand]; //chooses index value from choices[] based on random number
+
+        let square = chooseSquare(index); //from button nodelist choose a button that corresponds to Gameboard.results[i] === ''
 
         square.textContent = aiMark;
         Gameboard.results[index] = aiMark;
-        console.log('after ai move', Gameboard.results)
 
         displayController.enableButtons(buttons);
     }
@@ -168,7 +157,13 @@ const Game = (() => {
         played = true;
         console.log('after human turn', Gameboard.results);
 
-        setTimeout(callback, 1000);
+        setTimeout(() => {
+            if(Gameboard.boardIsFull()) {
+                return
+            } else {
+                callback();
+            }
+        }, 1000);
     }
 
     const aiTurn = () => {
@@ -179,13 +174,18 @@ const Game = (() => {
     }
 
     const restart = (buttons, x, o) => {
-        Gameboard.results = ['','','','','','','','',''];
-        Gameboard.choices = [];
+        Gameboard.results = [
+                             '','','',
+                             '','','',
+                             '','',''
+                            ];
+        //Gameboard.choices = [];
+
         Game.getAIPlayer().setMark('');
         Game.getHumanPlayer().setMark('');
         buttons.forEach(button => button.textContent = '');
 
-        if(x.classList.contains('active-selector') ||o.classList.contains('active-selector')) {
+        if(x.classList.contains('active-selector') || o.classList.contains('active-selector')) {
             x.classList.remove('active-selector');
             o.classList.remove('active-selector');
         }
@@ -229,11 +229,13 @@ const displayController = (() => {
         if(mark === 'X'){
             x.classList.add('active-selector');
             o.classList.remove('active-selector');
+
             Game.getHumanPlayer().setMark(mark);
             Game.getAIPlayer().setMark('O');
         }else {
             x.classList.remove('active-selector');
             o.classList.add('active-selector');
+
             Game.getHumanPlayer().setMark(mark);
             Game.getAIPlayer().setMark('X');
             AI.aiPlay(); //AI goes first if player chooses 'O'
