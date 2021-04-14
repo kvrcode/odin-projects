@@ -45,10 +45,12 @@ const Gameboard = (() => {
                    '','','',
                    '','',''
                   ];
+    let choices = [];
 
-    const squareIsOccupied = () => {
+    const squareIsOccupied = (index) => {
+        
+        if(Gameboard.results[index] !== '') return
 
-        console.log('i am here');
     }
 
     const boardIsFull = () => {
@@ -57,22 +59,63 @@ const Gameboard = (() => {
 
     }
 
+    const checkHorizontal = () => {
+
+    }
+
+    const checkVertical = () => {
+
+    }
+
+    const checkDiagonal = () => {
+
+    }
+
+    const checkWin = () => {
+
+    }
+
     return {
         results,
-        boardIsFull
+        choices,
+        boardIsFull,
+        squareIsOccupied,
+        checkWin
     }
 
 })()
 
 const AI = (() => {
+
     const buttons = document.querySelectorAll('.square');
 
-    const randomNumber = () => {
-        return Math.floor(Math.random() * 8); //random number 0 - 8
+    const randomNumber = (length) => {
+        const range = length - 1;
+        return Math.floor(Math.random() * range); // 0 - last index in Gameboard.choices array
+    }
+
+    const findEmptySquares = (arr) => {
+        let choices = [];
+        for(let i = 0; i <= arr.length - 1; i++) {
+            if(arr[i] === ''){
+                choices.push(i);
+                // Gameboard.choices.push(i);
+            }
+        }
+        // console.log(choices, 'CHOICES');
+        return choices;
+        console.log('indexes', Gameboard.choices);
+        // choices; //[] of indexes in Gameboard.results[] that equals ''
     }
 
     const chooseSquare = (num) => {
 
+        // console.log(Gameboard.results);
+        // const emptySpaces = findEmptySquares(Gameboard.results);
+        // const index = emptySpaces[num];
+
+        // console.log('empty spaces arr', emptySpaces)
+        // console.log('index', num);
         return buttons[num];
 
     }
@@ -81,24 +124,17 @@ const AI = (() => {
         if(Gameboard.boardIsFull()) return //dont make a move on a full board
 
         const aiMark = Game.getAIPlayer().getMark();
-        let rand = randomNumber();
-        let square = chooseSquare(rand);
 
-        if(square.textContent !== '') { //pick another square if current choice is taken -- currently failing
-            rand = randomNumber();
-            square = chooseSquare(rand);
-        }
-
-        //instead of random ^^^
-        //from Gameboard.results array...
-        //choose from element indexes that === ''
-        //then get that index to apply AIMark to the corresponding button
+        let choices = findEmptySquares(Gameboard.results);
+        console.log(choices, 'CHOICES');
+        let rand = randomNumber(choices.length);
+        let index = choices[rand];
+        let square = chooseSquare(index);
+        console.log(square);
 
         square.textContent = aiMark;
-        Gameboard.results[rand] = aiMark;
-
-        // if(buttons[rand].textContent !== '') { rand = Math.floor(Math.random() * 8) };
-        // console.log(square);
+        Gameboard.results[index] = aiMark;
+        console.log('after ai move', Gameboard.results)
 
         displayController.enableButtons(buttons);
     }
@@ -130,7 +166,7 @@ const Game = (() => {
         Gameboard.results[key] = playerMark;
 
         played = true;
-        console.log(Gameboard.results, played);
+        console.log('after human turn', Gameboard.results);
 
         setTimeout(callback, 1000);
     }
@@ -144,6 +180,9 @@ const Game = (() => {
 
     const restart = (buttons, x, o) => {
         Gameboard.results = ['','','','','','','','',''];
+        Gameboard.choices = [];
+        Game.getAIPlayer().setMark('');
+        Game.getHumanPlayer().setMark('');
         buttons.forEach(button => button.textContent = '');
 
         if(x.classList.contains('active-selector') ||o.classList.contains('active-selector')) {
