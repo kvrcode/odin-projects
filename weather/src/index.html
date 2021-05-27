@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Weather app built with tailwindcss">
+
+    <!-- google fonts -- prompt -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap" rel="stylesheet">
+
+    <title>4Cast</title>
+</head>
+<body class="font-prompt max-h-screen">
+    <header id="header" class="flex justify-between items-center py-6 px-4 bg-indigo-400 text-white">
+        <!-- brand logo/text -->
+        <span class="font-bold font-3xl">4Cast</span>
+        <!-- search -->
+        <div class="search flex items-center justify-center">
+            <input type="text" name="location" id="location" class="location-input outline-none rounded shadow p-2 text-black" placeholder="Boston, MA">
+            <button type="button" class="location-search">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+            </button>
+        </div>
+        <!-- expandable menu -- dark mode toggle | C or F toggle | etc... -->
+        <button type="button">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+        </button>
+    </header>
+
+    <section id="current" class="current relative flex flex-col justify-center items-center h-60">
+        <img src="" class="giphy absolute -top-0 -right-0 opacity-25 z-0 w-full h-full" alt="current weather related gif">
+        <p class="temperature text-5xl z-10"></p>
+        <p class="description"></p>
+        <p class="location text-3xl z-10"></p>
+
+        <span class="">See more details</span>
+    </section>
+
+    <section id="additional">
+        <button type="button" class="button">Show me the forecast</button>
+        <!-- 5 day forecast -->
+        <!-- <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> -->
+    </section>
+
+</body>
+</html>

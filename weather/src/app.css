@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    box-sizing: border-box; /* not sure this is included in tailwind base -- preflight styles */
+    /* font-family: Prompt, sans-serif; */
+}
