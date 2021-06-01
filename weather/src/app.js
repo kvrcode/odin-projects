@@ -1,81 +1,59 @@
-//need to implement MVC, oop, better system for state and fluidity of app.
-//make sure app follows this flow and code is readable
-
-//get CORRECT user input from 'form'
-
-//hit geocode api to get coordinates lat, lon
-//use coordinates to hit current weather api
-
-//based of current weather description, hit giphy api to get a related gif
-//update screen with gif(as background img), and current weather and location
-//button to display current weather specific details
-
-//button to display 5 day forecast
-//using coordinates hit forecast api and render results
-
+import './app.css';
 import 'regenerator-runtime/runtime';
 
-import { getCoordinates, getCurrentWeather } from './api/OpenWeather.js';
-// import { getCityId } from './api/city.js';
-import { updateCurrentDisplay } from './dom/dom.js';
+//model
+import Giphy from './api/gif/Giphy';
+import Geocode from './api/weather/Geocode';
+import Current from './api/weather/Current';
+import Forecast from './api/weather/Forecast';
+// import Storage from './api/data/LocalStorage  -- add something like this in future
 
-import './app.css';
+//view -- in this case, methods to interact with view
+import Dom from './dom/Dom';
+import Search from './dom/Search';
+import { renderCurrentView } from './dom/CurrentView';
 
-window.state = {
-    proxy: 'https://cors-anywhere.herokuapp.com/',
-    location: '',       //string from input.value 'Boston, MA'
-    latitude: '',       //coordinates
-    longitude: '',      //coordinates
-    currentData: {},    //reuturned data
-    forecastData: {},    //returned data
-    fahrenheit: true,
-    updateState: function() {
-        console.log(this.proxy, 'update');
-    }
+let state = {
+    dom: new Dom(),
+    search: {},
+    geocode: {},
+    giphy: {},
+    current: {},
+    forecast: {}
 }
 
-const resetState = () => {
-    console.log('state reset');
+const getDataForCurrentView = async () => {
+    state.current = new Current();
+    state.giphy = new Giphy();
+
+    await state.geocode.getCoordinates(state.search.city, state.search.state);
+    await state.current.getCurrentWeather(state.geocode.coords[0], state.geocode.coords[1]);
+    const query = `${state.current.data.weather[0].description} weather`
+    await state.giphy.getRelatedGif(query);
 }
 
-// const updateStateValue = (prop, value) => {
+//from user input, gets coordinates, to get current weather, to get related gif
+const handleSearch = async () => {
+    if (state.dom.input.value === '') return //basic err handling
+    console.log('--- handling search ---');
 
-// }
+    const { search } = state;
 
-// const getStateValue = () => {
+    search.location = search.formatText(search.input.value);
+    search.updateCityState();
+    search.clearText();
 
-// }
-
-const locationSearchHandler = async () => {
-    const input = document.querySelector('.location-input');
-
-    if (input.value === '') return //cant search for '', ''. implement better error handling to make it clear to user what to do
-
-    const locationQuery = input.value;
-    state.location = locationQuery;
-    const arr = locationQuery.split(',');
-    const city = arr[0];
-    const stateCode = arr[1].replace(/\s/g, ""); //changes ' MA' to 'MA'
-    // ^^^ refactor ^^^
-
-
-    const { latitude, longitude }  = await getCoordinates(state, city, stateCode); //returns {latitude: Num, longitude: Num}
-    state.latitude = latitude;
-    state.longitude = longitude;
-    // ^^^ functions to interact with state instead of blocks like this? ^^^
-
-    state.currentData = {...await getCurrentWeather(state)};
-    updateCurrentDisplay(state);
-    // showForecastOption();
-
-    //getCityId(city, state); //worry about this later, recommended just need to do it efficiently
-
+    await getDataForCurrentView();
+    renderCurrentView(state.dom, state.search, state.current, state.giphy);
+    console.log(state);
 }
 
-const locationSearchListener = (() => {
-    const search = document.querySelector('.location-search');
+document.addEventListener('DOMContentLoaded', async (e) => {
+    console.log('--- app loaded ---');
 
-    search.addEventListener('click', locationSearchHandler);
-})()
+    state.search = new Search(state.dom.search, state.dom.input);
+    state.geocode = new Geocode();
 
-document.addEventListener('DOMContentLoaded', () => console.log('--- app loaded ---'));
+    state.search.listener(handleSearch);
+    console.log(state);
+});
