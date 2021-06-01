@@ -43,10 +43,20 @@ const handleSearch = async () => {
     search.updateCityState();
     search.clearText();
 
+    //add loader
+
     await getDataForCurrentView();
+
+    //remove loader
+
     renderCurrentView(state.dom, state.search, state.current, state.giphy);
     console.log(state);
 }
+
+// const forecastHandler = async() => {
+    // await getForecastData();
+    // renderForecastView()
+// }
 
 document.addEventListener('DOMContentLoaded', async (e) => {
     console.log('--- app loaded ---');
@@ -56,4 +66,5 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 
     state.search.listener(handleSearch);
     console.log(state);
+    //state.dom.forecastBtn.addEventListener('click', forecastHandler);
 });
