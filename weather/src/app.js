@@ -10,8 +10,11 @@ import Forecast from './api/weather/Forecast';
 
 //view -- in this case, methods to interact with view
 import Dom from './dom/Dom';
+import Loader from './dom/Loader';
 import Search from './dom/Search';
 import { renderCurrentView } from './dom/CurrentView';
+import { renderExpandForecastBtn } from './dom/ForecastView';
+// import { renderForecastView } from './dom/ForecastView';
 
 let state = {
     dom: new Dom(),
@@ -23,8 +26,8 @@ let state = {
 }
 
 const getDataForCurrentView = async () => {
-    state.current = new Current();
-    state.giphy = new Giphy();
+    state.current = new Current(state.dom.localHost);
+    state.giphy = new Giphy(state.dom.localHost);
 
     await state.geocode.getCoordinates(state.search.city, state.search.state);
     await state.current.getCurrentWeather(state.geocode.coords[0], state.geocode.coords[1]);
@@ -35,36 +38,50 @@ const getDataForCurrentView = async () => {
 //from user input, gets coordinates, to get current weather, to get related gif
 const handleSearch = async () => {
     if (state.dom.input.value === '') return //basic err handling
-    console.log('--- handling search ---');
+    console.log('--- handling search request ---');
 
     const { search } = state;
+
+    // const loaderSRC = state.giphy.getLoaderGif();
+    const loader = new Loader(state.dom.current);
 
     search.location = search.formatText(search.input.value);
     search.updateCityState();
     search.clearText();
 
-    //add loader
+    //add loader Loader.render();
+    loader.render();
 
     await getDataForCurrentView();
 
-    //remove loader
+    //remove loader Loader.hide();
+    loader.hide();
 
-    renderCurrentView(state.dom, state.search, state.current, state.giphy);
+    renderCurrentView(state.dom, state.search, state.current, state.giphy); //add animations here animate.css or gsap
+
+    renderExpandForecastBtn(state.dom.forecastBtn);
+
     console.log(state);
 }
 
-// const forecastHandler = async() => {
-    // await getForecastData();
-    // renderForecastView()
-// }
+const forecastHandler = async() => {
+    console.log('handling forecast btn');
+
+    state.forecast = new Forecast(state.dom.localHost);
+
+    await state.forecast.getForecastData(state.geocode.coords[0], state.geocode.coords[1]);
+    // renderForecastView();
+}
 
 document.addEventListener('DOMContentLoaded', async (e) => {
     console.log('--- app loaded ---');
 
+    state.dom.isLocalHost(); //boolean when page loads is it run locally or via github pages
+
     state.search = new Search(state.dom.search, state.dom.input);
-    state.geocode = new Geocode();
+    state.geocode = new Geocode(state.dom.localHost);
 
     state.search.listener(handleSearch);
     console.log(state);
-    //state.dom.forecastBtn.addEventListener('click', forecastHandler);
+    state.dom.forecastBtn.addEventListener('click', forecastHandler);
 });

@@ -2,10 +2,10 @@ import axios from 'axios';
 import 'regenerator-runtime/runtime';
 
 import { weatherKey } from '../key.js';
-import { isLocalHost } from '../../dom/dom.js';
 
 export default class Current {
-    constructor() {
+    constructor(localhost) {
+        this.localhost = localhost;
         this.proxy = 'https://cors-anywhere.herokuapp.com/';
         this.data = {};
     }
@@ -13,7 +13,7 @@ export default class Current {
     async getCurrentWeather(lat, lon) {
         console.log('axios is getting current weather using coordinates');
         let url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${weatherKey}`;
-        if( isLocalHost() ) { url = this.proxy + url; }
+        if( this.localhost ) { url = this.proxy + url; }
 
         try {
 

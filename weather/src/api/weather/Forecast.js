@@ -2,25 +2,25 @@ import axios from 'axios';
 import 'regenerator-runtime/runtime';
 
 import { weatherKey } from '../key.js';
-import { isLocalHost } from '../../dom/dom.js';
 
 export default class Forecast {
-    constructor(){
+    constructor(localhost){
+        this.localhost = localhost;
         this.proxy = 'https://cors-anywhere.herokuapp.com/';
-        this.data = {};
+        this.data = [];
     }
 
-    async getForecast(lat, lon) {
+    async getForecastData(lat, lon) {
         console.log('axios is getting coordinates');
-        let url = `api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${weatherKey}`;
-        if( isLocalHost() ) { url = this.proxy + url; }
+        let url = `api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${weatherKey}`;
+        if( this.localhost ) { url = this.proxy + url; }
 
         try {
 
             const res = await axios.get(url);
-            const data = res.data;
-            const {lat, lon} = data[0];
-            this.coords.push(lat, lon);
+            const data = res.data.list; //api returns 5 day forecast over 3 hour increments. so taking every 8th obj and recording that data for daily forecast
+            this.data = data.filter((obj, key) => key % 8 === 0);
+            console.log(this.data);
 
         }catch(error){
 
@@ -28,6 +28,6 @@ export default class Forecast {
 
         }
 
-        return this.coords;
+        return this.data;
     }
 }

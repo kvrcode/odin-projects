@@ -2,19 +2,18 @@ import axios from 'axios';
 import 'regenerator-runtime/runtime';
 
 import { weatherKey } from '../key.js';
-import { isLocalHost } from '../../dom/Dom.js';
 
 export default class Geocode {
-    constructor(){
+    constructor(localhost){
+        this.localhost = localhost;
         this.proxy = 'https://cors-anywhere.herokuapp.com/';
         this.coords = [];
     }
 
     async getCoordinates(city, state) {
         console.log('axios is getting coordinates');
-        console.log(weatherKey);
         let url = `http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},US&limit=3&appid=${weatherKey}`;
-        if( isLocalHost() ) { url = this.proxy + url; }
+        if( this.localhost ) { url = this.proxy + url; }
 
         try {
 

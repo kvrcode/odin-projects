@@ -2,13 +2,14 @@ import axios from 'axios';
 import 'regenerator-runtime/runtime';
 
 import { gifKey } from '../key.js';
-import { isLocalHost } from '../../dom/Dom';
 
 export default class Giphy {
-    constructor(){
+    constructor(localhost){
+        this.localhost = localhost;
         this.proxy  = 'https://cors-anywhere.herokuapp.com/';
         this.gifs   = []; //in future - array of random gifs selected from matching keywords, choosing one at random to display or cycle through
         this.gifSRC = '';
+        this.loader = '';
     }
 
     formatQuery(query) {
@@ -22,7 +23,7 @@ export default class Giphy {
         // console.log(search);
 
         let url = `http://api.giphy.com/v1/gifs/search?q=${query}&api_key=${gifKey}`;
-        if( isLocalHost() ) { url = this.proxy + url; }
+        if( this.localhost ) { url = this.proxy + url; }
 
         let data;
 
@@ -37,5 +38,21 @@ export default class Giphy {
 
         return this.gifSRC;
 
+    }
+
+    async getLoaderGif() {
+        console.log('getting loader gif');
+
+        let url = `http://api.giphy.com/v1/gifs/search?q=loader&api_key=${gifKey}`;
+        if( this.localhost ) { url = this.proxy + url; }
+
+        try{
+            const res = await axios.get(url);
+            this.loader = res.data.data[0].images.original.webp;
+        }catch(error) {
+            console.error(error);
+        }
+
+        return this.loader;
     }
 }
