@@ -11,7 +11,8 @@ export default class Forecast {
     }
 
     async getForecastData(lat, lon) {
-        console.log('axios is getting coordinates');
+        console.log('axios is getting forecast data');
+        console.log(lat, lon);
         let url = `api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${weatherKey}`;
         if( this.localhost ) { url = this.proxy + url; }
 

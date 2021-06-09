@@ -41,7 +41,117 @@
     <section id="additional" class="h-full text-center">
         <button type="button" class="hidden forecast-button bg-gray-800 text-white rounded-md py-4 px-2 mx-auto w-64 focus:outline-none">Show me the forecast</button>
         <!-- 5 day forecast -->
-        <!-- <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> -->
+        <div class="hidden forecast container mx-auto px-4 sm:px-8">
+            <div class="py-8">
+                <div>
+                    <h2 class="text-2xl font-semibold leading-tight">Forecast</h2>
+                </div>
+                <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                        <table class="min-w-full leading-normal">
+                            <thead>
+                                <tr>
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Day
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        High
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Low
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Feels Like
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-body">
+                                <!-- <tr>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                                                <img class="w-full h-full rounded-full"
+                                                    src="https://images.unsplash.com/photo-1601046668428-94ea13437736?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2167&q=80"
+                                                    alt="" />
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-gray-900 whitespace-no-wrap">
+                                                    Today
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap text-center">92</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap text-center">
+                                            83
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+                                        <div class="flex items-center float-right">
+                                            <div class="mr-3">
+                                                <p class="text-gray-900 whitespace-no-wrap text-right">
+                                                    69
+                                                </p>
+                                            </div>
+                                            <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                                                <img class="w-full h-full rounded-full"
+                                                    src="https://images.unsplash.com/photo-1601046668428-94ea13437736?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2167&q=80"
+                                                    alt="" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                                                <img class="w-full h-full rounded-full"
+                                                    src="https://images.unsplash.com/photo-1601046668428-94ea13437736?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2167&q=80"
+                                                    alt="" />
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-gray-900 whitespace-no-wrap">
+                                                    Team 3
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap text-center">0</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap text-center">
+                                            3
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+                                        <div class="flex items-center float-right">
+                                            <div class="mr-3">
+                                                <p class="text-gray-900 whitespace-no-wrap text-right">
+                                                    Team 4
+                                                </p>
+                                            </div>
+                                            <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                                                <img class="w-full h-full rounded-full"
+                                                    src="https://images.unsplash.com/photo-1601046668428-94ea13437736?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2167&q=80"
+                                                    alt="" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
 </body>

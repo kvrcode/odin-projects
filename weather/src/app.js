@@ -14,7 +14,7 @@ import Loader from './dom/Loader';
 import Search from './dom/Search';
 import { renderCurrentView } from './dom/CurrentView';
 import { renderExpandForecastBtn } from './dom/ForecastView';
-// import { renderForecastView } from './dom/ForecastView';
+import { renderForecastView } from './dom/ForecastView';
 
 let state = {
     dom: new Dom(),
@@ -69,8 +69,11 @@ const forecastHandler = async() => {
 
     state.forecast = new Forecast(state.dom.localHost);
 
+    state.dom.forecastBtn.classList.add('hidden');
+
     await state.forecast.getForecastData(state.geocode.coords[0], state.geocode.coords[1]);
-    // renderForecastView();
+
+    renderForecastView(state.forecast.data, state.dom.tableBody, state.dom.forecast);
 }
 
 document.addEventListener('DOMContentLoaded', async (e) => {

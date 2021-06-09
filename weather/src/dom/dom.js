@@ -10,6 +10,8 @@ export default class Dom {
         this.more           = document.querySelector('.more');
         this.description    = document.querySelector('.description');
         this.forecastBtn    = document.querySelector('.forecast-button');
+        this.forecast       = document.querySelector('.forecast');
+        this.tableBody      = document.querySelector('.table-body');
     }
 
     isLocalHost() {

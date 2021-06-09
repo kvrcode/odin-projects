@@ -8,6 +8,9 @@ export default class Loader {
 
         const div = document.createElement('div');
 
+
+        div.classList.add('absolute', '-top-0', 'z-50');
+
         const img = document.createElement('img');
         img.src = 'https://media.giphy.com/media/swhRkVYLJDrCE/giphy.gif';
         img.alt = 'loading animation';
@@ -18,17 +21,10 @@ export default class Loader {
     }
     
     hide() {
-        this.append.removeChild(this.loader);
-        // this.append.innerHTML = '';
-        // this.append.remove(0);
+        return this.append.removeChild(this.loader);
     }
 
     render() {
-        // const loader = this.generate();
-        // console.log(this.loader);
-        // console.log(typeof this.loader);
-        this.append.appendChild(this.loader);
-        // this.append.innerHTML = this.loader;
-        // this.append.insertAdjacentHTML('afterBegin', this.loader);
+        return this.append.appendChild(this.loader);
     }
 }
